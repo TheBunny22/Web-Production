@@ -1,0 +1,11 @@
+.con::before,
+.con::after {
+  content: "";
+  display: inline-block;
+  width: 1px;
+  height: 3rem;
+  background-color: #eee;
+}
+.dimension:focus{
+    outline: none;
+}
