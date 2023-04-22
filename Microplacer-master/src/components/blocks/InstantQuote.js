@@ -2,8 +2,14 @@ import React from "react";
 import { useState } from "react";
 import uploadIcon from "../../img/uploadicon.png";
 import "./Instantstyle.css";
+import {
+  CDropdown,
+  CDropdownToggle,
+  CDropdownMenu,
+  CButton,
+} from "@coreui/react";
 const InstantQuote = () => {
-  const [selectedLayer, setSelectedLayer] = useState(1);
+  // handle uploading of files
   const handleFileSelect = (event) => {
     const file = event.target.files[0];
     if (
@@ -12,6 +18,44 @@ const InstantQuote = () => {
         file.type === "application/x-rar-compressed")
     ) {
       console.log("accepted");
+    }
+  };
+  // setting layer
+  const [selectedLayer, setSelectedLayer] = useState(1);
+  // setting x and y dimendsion of pcb
+  const [xdimension, setXdimension] = useState(20);
+  const [ydimension, setYdimension] = useState(20);
+
+  const handleXdimension = (e) => {
+    var num = e.target.value;
+    setXdimension(num);
+    if (num > 350) {
+      setXdimension(350);
+    }
+    console.log(num);
+  };
+
+  const handleYdimension = (e) => {
+    var num = e.target.value;
+    setYdimension(num);
+    if (num > 350) {
+      setYdimension(350);
+    }
+    console.log(num);
+  };
+
+  // quantity
+
+  const options = [
+    5, 10, 15, 20, 25, 30, 50, 75, 100, 125, 150, 200, 250, 300, 400, 450, 500,
+    600, 700, 800, 900, 1000,
+  ];
+
+  const [quantity, setQuantity] = useState(5);
+  const handleQuantityChange = (event, element, spec) => {
+    let value = event.target.value;
+    if (event.target.className === "qt-bt") {
+      setQuantity(value);
     }
   };
 
@@ -61,9 +105,6 @@ const InstantQuote = () => {
         </div>
       </div>
 
-      <span className="con">
-        <div>OR</div>
-      </span>
 
       <span style={Inputcvr}>
         <label>Layer</label>
@@ -114,49 +155,102 @@ const InstantQuote = () => {
         <div
           style={{
             border: "1px solid #eee",
-            maxWidth: "10rem",
+            Width: "20rem",
+           fontSize:"14px",
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
           }}
         >
           <input
-            type="text"
+            type="number"
+            value={xdimension}
+            onChange={handleXdimension}
             className="dimension"
-            style={{ width: "4rem", border: "none", padding: ".5rem" }}
+            style={{ width: "5rem", border: "none", padding: ".5rem" }}
           />
           X
           <input
             className="dimension"
-            type="text"
-            style={{ width: "4rem", border: "none", padding: ".5rem" }}
+            type="number"
+            value={ydimension}
+            onChange={handleYdimension}
+            style={{ width: "5rem", border: "none", padding: ".5rem" }}
           />
         </div>
       </span>
       <span style={Inputcvr}>
-         <label>Quantity</label>
+        <label>Quantity</label>
+        <span>
+          <CDropdown>
+            <CDropdownToggle style={buttonstyle}>{quantity}</CDropdownToggle>
+            <CDropdownMenu>
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "1fr 1fr 1fr 1fr 1fr",
+                  gap: "1rem",
+                  padding: "1rem",
+                }}
+              >
+                {options.map((option) => (
+                  <button
+                    className="qt-bt"
+                    style={buttonstyle}
+                    onClick={(event) =>
+                      handleQuantityChange(event, "quantity", { option })
+                    }
+                    value={option}
+                    key={option.toString()}
+                  >
+                    {option}
+                  </button>
+                ))}
+              </div>
+            </CDropdownMenu>
+          </CDropdown>
+        </span>
+      </span>
+      <span style={Inputcvr}>
+        <span style={{
+          scale:"1.5",
+       
+        }}>
+          <CButton>Instant Quote</CButton>
+        </span>
       </span>
     </div>
   );
 };
+
 //css
+const buttonstyle = {
+  background: "white",
+  border: "1px solid #eee",
+  color: "black",
+  padding:"1rem"
+};
 const Inputcvr = {
   display: "flex",
   flexDirection: "column",
-  justifyContent:"center",
+  justifyContent: "center",
+  alignItems:"center",
+  fontSize:"14px",
 };
 const activebt = {
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
   border: "1px solid  blue",
-  padding: ".5rem 2rem",
+  padding: ".8rem 2rem",
   textAlign: "center",
 };
 const cover = {
   display: "grid",
   gridTemplateColumns: "repeat(5,1fr)",
   height: "10rem",
+
+  gap:"1rem",
   zIndex: "5",
   borderRadius: "1rem",
   position: "relative",
@@ -164,12 +258,9 @@ const cover = {
   maxWidth: "1250px",
   margin: "auto",
   bottom: "5rem",
-  boxShadow: "0px 5px 30px 0px GREY",
+  boxShadow: "0px 0px 2px 0px GREY",
 };
-const radiocvr = {
-  display: "flex",
-  flexDirection: "column",
-};
+
 const radiowrapper = {
   display: "flex",
   position: "relative",
@@ -179,16 +270,10 @@ const radiobt = {
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
-  border: "1px solid #252525",
+  border: "1px solid #eee",
   cursor: "pointer",
-  padding: ".5rem 2rem",
+  padding: ".8rem 2rem",
   textAlign: "center",
 };
-const radio = {
-  position: "relative",
-  cursor: "pointer",
-  minWidth: "100%",
-  border: "1px solid",
-  opacity: "0",
-};
+
 export default InstantQuote;
